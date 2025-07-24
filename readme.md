@@ -27,12 +27,17 @@ Instalação
 - ffmpeg (Instalação Automática Via Ytdlp)
 
 2. Configuração
-git clone https://github.com/phoenixsrd/yt-dlp-advanced.git
-cd yt-dlp-advanced
-pip install -r requirements.txt
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-venv\Scripts\activate    # Windows
+
+`git clone https://github.com/phoenixsrd/yt-dlp-advanced.git`
+
+`cd yt-dlp-advanced`
+
+`pip install -r requirements.txt`
+
+`python -m venv venv
+source venv/bin/activate  # Linux/Mac`
+
+`venv\Scripts\activate    # Windows`
 
 ## Como Usar
 
