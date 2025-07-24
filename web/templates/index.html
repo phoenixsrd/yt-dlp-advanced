@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ytdlp Web Downloader</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; }
+        input, select { width: 100%; padding: 8px; box-sizing: border-box; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; cursor: pointer; }
+        .message { color: green; margin: 15px 0; }
+    </style>
+</head>
+<body>
+    <h1>Download De Vídeos/Aúdios</h1>
+    {% if message %}
+        <p class="message">{{ message }}</p>
+    {% endif %}
+    <form method="post">
+        <div class="form-group">
+            <label>URL:</label>
+            <input type="text" name="url" required>
+        </div>
+        
+        <div class="form-group">
+            <label>Tipo:</label>
+            <select name="type">
+                <option value="video">Vídeo</option>
+                <option value="audio">Áudio</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label>Qualidade:</label>
+            <select name="quality">
+                <option value="best">Melhor</option>
+                <option value="1080">1080p</option>
+                <option value="720">720p</option>
+                <option value="480">480p</option>
+                <option value="worst">Pior</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label>Formato:</label>
+            <select name="format">
+                <option value="mp4">MP4</option>
+                <option value="mkv">MKV</option>
+                <option value="webm">WEBM</option>
+                <option value="mp3">MP3</option>
+                <option value="opus">Opus</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label>
+                <input type="checkbox" name="subtitles">
+                Extrair Legendas
+            </label>
+        </div>
+        
+        <div class="form-group">
+            <label>
+                <input type="checkbox" name="thumbnail">
+                Extrair Thumbnail
+            </label>
+        </div>
+        
+        <div class="form-group">
+            <label>
+                <input type="checkbox" name="metadata">
+                Salvar Metadados
+            </label>
+        </div>
+        
+        <button type="submit">Iniciar Download</button>
+    </form>
+</body>
+</html>
