@@ -24,7 +24,7 @@ Funcionalidades:
 Instalação
 1. Requisitos:
 - Python 3.10+
-- ffmpeg (Instalação Automática Via Ytdlp)
+- ffmpeg
 
 2. Configuração
 
