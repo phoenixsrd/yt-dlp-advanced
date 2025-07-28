@@ -22,7 +22,7 @@ Projeto Completo Para Download De Vídeos E Áudios De +1000 Sites Usando Ytdlp.
 9. Atualização Automática
 
 ### Instalação
-1. Requisitos:
+1. Requisitos
 - Python 3.10+
 - ffmpeg
 
@@ -87,4 +87,4 @@ source venv/bin/activate # Linux/Mac`
 
 8. Atualizar O Ytdlp `python updateytdlp.py`
 
-O Projeto Está Totalmente Configurável Através Do Arquivo `.env` E Oferece Uma Experiência Completa Tanto Para Usuários Técnicos (CLI) Quanto Para Usuários Comuns (interface Web).
+O Projeto Está Totalmente Configurável E Oferece Uma Experiência Completa Tanto Para Usuários Técnicos (CLI) Quanto Para Usuários Comuns (Interface Web).
