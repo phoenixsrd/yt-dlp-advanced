@@ -2,7 +2,7 @@
 
 Projeto Completo Para Download De Vídeos E Áudios De +1000 Sites Usando Ytdlp.
 
-Funcionalidades:
+### Funcionalidades
 1. Download De Vídeos/Áudios Em Múltiplos Formatos (mp4, mp3, mkv, webm, opus)
 
 2. Seleção De Qualidade (480p, 720p, 1080p, best, worst)
@@ -21,7 +21,7 @@ Funcionalidades:
 
 9. Atualização Automática
 
-Instalação
+### Instalação
 1. Requisitos:
 - Python 3.10+
 - ffmpeg
@@ -41,7 +41,7 @@ source venv/bin/activate # Linux/Mac`
 
 ## Como Usar
 
-Recursos Implementados
+### Recursos Implementados
 1. Download De Vídeos/Áudios Em Múltiplos Sites
 
 2. Suporte A Formatos mp4, mp3, mkv, webm, opus
@@ -70,7 +70,7 @@ Recursos Implementados
 
 14. Logs Detalhados E Tratamento De Erros
 
-Para Executar
+### Para Executar
 1. Modo CLI: `python main.py` (Seguir Prompts) Ou Com Argumentos
 
 2. Modo Web `python main.py` E Selecionar Opção 2, Depois Acessar A Url Fornecida
