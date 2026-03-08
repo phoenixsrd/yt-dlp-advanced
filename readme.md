@@ -3,6 +3,7 @@
 Projeto Completo Para Download De Vídeos E Áudios De +1000 Sites Usando Ytdlp.
 
 ### Funcionalidades
+
 1. Download De Vídeos/Áudios Em Múltiplos Formatos (mp4, mp3, mkv, webm, opus)
 
 2. Seleção De Qualidade (480p, 720p, 1080p, best, worst)
@@ -22,26 +23,38 @@ Projeto Completo Para Download De Vídeos E Áudios De +1000 Sites Usando Ytdlp.
 9. Atualização Automática
 
 ### Instalação
+
 1. Requisitos
 - Python 3.10+
 - ffmpeg
 
 2. Configuração
 
-`git clone https://github.com/phoenixsrd/yt-dlp-advanced.git`
+```bash
+git clone https://github.com/phoenixsrd/yt-dlp-advanced.git
+```
 
-`cd yt-dlp-advanced`
+```bash
+cd yt-dlp-advanced
+```
 
-`pip install -r requirements.txt`
+```bash
+pip install -r requirements.txt
+```
 
-`python -m venv venv
-source venv/bin/activate # Linux/Mac`
+```bash
+python -m venv venv
+source venv/bin/activate
+```
 
-`venv\Scripts\activate # Windows`
+```bash
+venv\Scripts\activate
+```
 
 ## Como Usar
 
 ### Recursos Implementados
+
 1. Download De Vídeos/Áudios Em Múltiplos Sites
 
 2. Suporte A Formatos mp4, mp3, mkv, webm, opus
@@ -71,20 +84,49 @@ source venv/bin/activate # Linux/Mac`
 14. Logs Detalhados E Tratamento De Erros
 
 ### Para Executar
-1. Modo CLI: `python main.py` (Seguir Prompts) Ou Com Argumentos
 
-2. Modo Web `python main.py` E Selecionar Opção 2, Depois Acessar A Url Fornecida
+1. Modo CLI
 
-3. Opções Avançadas 
+```bash
+python main.py
+```
 
-4. Playlist Com Intervalo `python main.py --url "https://youtube.com/playlist?list=..." --playlist --interval 1:10`
+2. Modo Web
 
-5. Áudio Em OPUS `python main.py --url "https://twitter.com/..." --type audio --format opus`
+```bash
+python main.py
+```
 
-6. Com Proxy `python main.py --url "https://tiktok.com/..." --proxy "http://user:pass@host:port"`
+### Opções Avançadas
 
-7. Fila De Downloads `python main.py --url "https://exemplo.com/video1" "https://exemplo.com/video2" --queue`
+3. Playlist Com Intervalo
 
-8. Atualizar O Ytdlp `python updateytdlp.py`
+```bash
+python main.py --url "https://youtube.com/playlist?list=..." --playlist --interval 1:10
+```
+
+4. Áudio Em OPUS
+
+```bash
+python main.py --url "https://twitter.com/..." --type audio --format opus
+```
+
+5. Com Proxy
+
+```bash
+python main.py --url "https://tiktok.com/..." --proxy "http://user:pass@host:port"
+```
+
+6. Fila De Downloads
+
+```bash
+python main.py --url "https://exemplo.com/video1" "https://exemplo.com/video2" --queue
+```
+
+7. Atualizar O Ytdlp
+
+```bash
+python updateytdlp.py
+```
 
 O Projeto Está Totalmente Configurável E Oferece Uma Experiência Completa Tanto Para Usuários Técnicos (CLI) Quanto Para Usuários Comuns (Interface Web).
