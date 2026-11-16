@@ -1,38 +1,42 @@
 # ⬇️ yt-dlp Advanced
 
-O **yt-dlp Advanced Downloader** é uma ferramenta Python que oferece uma camada prática sobre o `yt-dlp` para baixar vídeos e áudios de muitos sites compatíveis. Ela combina uma CLI interativa, uma interface web Flask, seleção de qualidade, playlists, filas, metadados e configurações opcionais de proxy.
+Camada prática sobre o `yt-dlp` para baixar vídeos e áudios de sites compatíveis. Oferece uma CLI com argumentos e modo interativo, uma interface web em Flask, seleção de qualidade, playlists, fila com downloads simultâneos, extração de legendas, thumbnails e metadados, além de proxy configurável.
 
 > Baixe apenas conteúdo que você tem autorização para obter e respeite os termos de uso, direitos autorais e leis aplicáveis a cada serviço.
 
 ## Recursos
 
-- Download de vídeo e áudio em formatos como MP4, MP3, MKV, WebM e Opus.
-- Seleção de qualidade (`480p`, `720p`, `1080p`, `best` e `worst`).
-- CLI interativa para uso no terminal.
-- Servidor web Flask para quem prefere uma interface no navegador.
-- Playlists com opções de intervalo e skip.
-- Extração de legendas, thumbnails e metadados em JSON.
-- Filas e downloads simultâneos.
-- Proxy configurável por argumento ou `.env`.
-- Script separado para atualizar o `yt-dlp`.
-- Logs e tratamento de erros para facilitar o acompanhamento.
+- Download de vídeo e áudio nos formatos `mp4`, `mkv`, `webm`, `mp3` e `opus`.
+- Qualidade por altura máxima (`480`, `720`, `1080`), `best` ou `worst`.
+- CLI com argumentos ou modo interativo, que pergunta cada opção.
+- Interface web em Flask com formulário de download.
+- Playlists com limite de itens ou intervalo.
+- Legendas (todos os idiomas disponíveis), thumbnail e metadados salvos em JSON.
+- Fila com downloads simultâneos (padrão: 3).
+- Proxy por argumento ou variável de ambiente.
+- Atualização do `yt-dlp` por comando ou script.
+- Log de cada execução em arquivo.
 
-## Como a aplicação inicia
-
-`main.py` escolhe o modo de execução: quando recebe argumentos, encaminha o controle para `cli.interface`; sem argumentos, apresenta um menu para iniciar a CLI ou o servidor web. A lógica compartilhada fica separada em `core`, a interface web em `web` e os componentes da CLI em `cli`.
+## Estrutura
 
 ```text
-main.py
-├── cli/  → interface e argumentos do terminal
-├── core/ → lógica de download, filas e configurações
-└── web/  → servidor Flask e interface do navegador
+main.py            Ponto de entrada: CLI se houver argumentos, senão menu
+updateytdlp.py     Atualiza o yt-dlp via pip
+cli/interface.py   Argumentos e modo interativo
+core/config.py     Configurações lidas do .env
+core/downloader.py Opções do yt-dlp, download único e fila
+core/metadata.py   Gravação do JSON de metadados
+core/utils.py      Logger e atualização do yt-dlp
+web/server.py      Aplicação Flask
+web/templates/     Página do formulário
+.env               Valores padrão de configuração
+requirements.txt   yt-dlp, Flask e python-dotenv
 ```
 
 ## Pré-requisitos
 
 - Python 3.10 ou superior.
-- `ffmpeg` instalado e disponível no `PATH` para conversões e pós-processamento.
-- Dependências do `requirements.txt`: `yt-dlp`, `Flask` e `python-dotenv`.
+- `ffmpeg` no `PATH`, necessário para juntar vídeo e áudio e para extrair áudio em `mp3` ou `opus`.
 
 ## Instalação
 
@@ -40,38 +44,88 @@ main.py
 git clone https://github.com/phoenixsrd/yt-dlp-advanced.git
 cd yt-dlp-advanced
 python -m venv .venv
-source .venv/bin/activate          # Linux/macOS
-# .venv\\Scripts\\activate        # Windows
+source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Se o projeto usar proxy ou outras opções externas, copie o `.env` de exemplo/configuração conforme a implementação atual e mantenha segredos fora do controle de versão.
+No Windows, ative o ambiente com `.venv\Scripts\activate`.
 
-## Executar
+## Configuração
 
-### Menu interativo
+O `.env` já vem com os valores padrão. Todas as variáveis são opcionais.
+
+| Variável | Padrão | Descrição |
+|---|---|---|
+| `DOWNLOAD_DIR` | `Download` | Pasta de destino dos arquivos |
+| `LOG_DIR` | `logs` | Pasta dos logs (`download_AAAAMMDD_HHMMSS.log`) |
+| `CONCURRENT_DOWNLOADS` | `3` | Downloads simultâneos no modo fila |
+| `DEFAULT_FORMAT` | `mp4` | Formato usado quando nenhum é informado |
+| `DEFAULT_QUALITY` | `best` | Qualidade padrão |
+| `PROXY` | vazio | Proxy no formato `http://usuario:senha@host:porta` |
+
+Se for usar proxy com usuário e senha, mantenha essas credenciais fora do Git.
+
+## Uso
+
+### Menu
 
 ```bash
 python main.py
 ```
 
-Escolha `1` para a CLI ou `2` para o servidor web. O servidor é iniciado em `0.0.0.0:5000`; acesse `http://localhost:5000`.
+Sem argumentos, o programa pergunta o modo: `1` para a CLI interativa ou `2` para o servidor web.
 
-### CLI com argumentos
+### CLI
+
+As URLs são passadas diretamente, sem `--url`.
 
 ```bash
-python main.py --url "https://youtube.com/playlist?list=..." --playlist --interval 1:10
-python main.py --url "https://exemplo.com/video" --type audio --format opus
-python main.py --url "https://exemplo.com/video" --proxy "http://user:pass@host:port"
-python main.py --url "https://exemplo.com/video1" "https://exemplo.com/video2" --queue
+python main.py "https://exemplo.com/video"
+python main.py "https://exemplo.com/video" --quality 720
+python main.py "https://exemplo.com/video" --type audio --format mp3
+python main.py "https://exemplo.com/video" --subtitles --thumbnail --metadata
+python main.py "https://exemplo.com/video" --proxy "http://usuario:senha@host:porta"
+python main.py "https://exemplo.com/video1" "https://exemplo.com/video2" --queue
+python main.py --update
 ```
 
-### Atualizar yt-dlp
+Sem nenhuma URL, a CLI entra no modo interativo e pergunta URL, tipo, qualidade, formato, pasta, playlist, legendas, thumbnail, metadados, proxy e fila.
+
+| Argumento | Descrição |
+|---|---|
+| `url` | Uma ou mais URLs |
+| `--type` | `video` (padrão), `audio` ou `both` |
+| `--quality` | `480`, `720`, `1080`, `best` (padrão) ou `worst` |
+| `--format` | `mp4` (padrão), `mkv`, `webm`, `mp3` ou `opus` |
+| `--output` | Pasta de saída (padrão: `DOWNLOAD_DIR`) |
+| `--playlist` | Trata a URL como playlist |
+| `--skip N` | Em playlist, baixa os itens de 1 até N |
+| `--interval` | Em playlist, intervalo de itens no formato `inicio:fim` |
+| `--subtitles` | Baixa legendas |
+| `--thumbnail` | Baixa a thumbnail |
+| `--metadata` | Salva o JSON de metadados na pasta de saída, com o ID do vídeo como nome |
+| `--proxy` | Proxy para a execução |
+| `--update` | Atualiza o `yt-dlp` antes de baixar |
+| `--queue` | Baixa as URLs em paralelo usando a fila |
+
+### Interface web
+
+Escolha `2` no menu, ou rode `python web/server.py`. O servidor sobe em `0.0.0.0:5000`; acesse `http://localhost:5000`.
+
+O formulário tem URL, tipo, qualidade, formato e as opções de legendas, thumbnail e metadados. O download roda em segundo plano e os arquivos ficam na pasta `DOWNLOAD_DIR`. Para usar proxy na interface web, defina `PROXY` no `.env`.
+
+A interface não tem autenticação. Se for acessá-la de outros aparelhos, use apenas em rede confiável.
+
+### Atualizar o yt-dlp
 
 ```bash
 python updateytdlp.py
 ```
 
-## Observações
+## Comportamentos a conhecer
 
-O suporte real a sites, formatos, autenticação e opções depende do `yt-dlp` instalado e do código em `core`. Alguns sites podem exigir cookies, autenticação ou configurações específicas. Nunca coloque cookies, tokens ou credenciais no repositório.
+- `--type both` é aceito, mas hoje se comporta como `video`.
+- `--skip N` limita a playlist aos itens de 1 até N, e não pula os N primeiros.
+- `--interval` funciona de forma confiável no modo interativo. Passado como argumento, o valor `inicio:fim` não é convertido em números e o download falha ao montar as opções.
+- A interface web não oferece playlist, fila nem proxy no formulário.
+- O suporte a sites, formatos e autenticação depende do `yt-dlp` instalado. Alguns sites podem exigir cookies ou configurações específicas, que não devem ser colocados no repositório.
