@@ -110,7 +110,7 @@ Sem nenhuma URL, a CLI entra no modo interativo e pergunta URL, tipo, qualidade,
 
 ### Interface web
 
-Escolha `2` no menu, ou rode `python web/server.py`. O servidor sobe em `0.0.0.0:5000`; acesse `http://localhost:5000`.
+Escolha `2` no menu. O servidor sobe em `0.0.0.0:5000`; acesse `http://localhost:5000`.
 
 O formulário tem URL, tipo, qualidade, formato e as opções de legendas, thumbnail e metadados. O download roda em segundo plano e os arquivos ficam na pasta `DOWNLOAD_DIR`. Para usar proxy na interface web, defina `PROXY` no `.env`.
 
