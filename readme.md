@@ -59,11 +59,11 @@ O `.env` já vem com os valores padrão. Todas as variáveis são opcionais.
 | `DOWNLOAD_DIR` | `Download` | Pasta de destino dos arquivos |
 | `LOG_DIR` | `logs` | Pasta dos logs (`download_AAAAMMDD_HHMMSS.log`) |
 | `CONCURRENT_DOWNLOADS` | `3` | Downloads simultâneos no modo fila |
-| `DEFAULT_FORMAT` | `mp4` | Formato usado quando nenhum é informado |
-| `DEFAULT_QUALITY` | `best` | Qualidade padrão |
 | `PROXY` | vazio | Proxy no formato `http://usuario:senha@host:porta` |
+| `DEFAULT_FORMAT` | `mp4` | Lido pelo código, mas a CLI e o formulário web sempre enviam um formato, então hoje não tem efeito |
+| `DEFAULT_QUALITY` | `best` | Lida em `core/config.py`, mas não é usada por nenhuma parte do programa |
 
-Se for usar proxy com usuário e senha, mantenha essas credenciais fora do Git.
+O `.env` é versionado neste repositório. Se for usar proxy com usuário e senha, não coloque essas credenciais nele sem antes tirá-lo do controle de versão.
 
 ## Uso
 
@@ -89,7 +89,7 @@ python main.py "https://exemplo.com/video1" "https://exemplo.com/video2" --queue
 python main.py --update
 ```
 
-Sem nenhuma URL, a CLI entra no modo interativo e pergunta URL, tipo, qualidade, formato, pasta, playlist, legendas, thumbnail, metadados, proxy e fila.
+Sem nenhuma URL, a CLI entra no modo interativo e pergunta URL, tipo, qualidade, formato, pasta, playlist, legendas, thumbnail, metadados, proxy e fila. Isso vale também para `--update` sozinho: o `yt-dlp` é atualizado e, em seguida, o modo interativo começa.
 
 | Argumento | Descrição |
 |---|---|
@@ -112,9 +112,9 @@ Sem nenhuma URL, a CLI entra no modo interativo e pergunta URL, tipo, qualidade,
 
 Escolha `2` no menu. O servidor sobe em `0.0.0.0:5000`; acesse `http://localhost:5000`.
 
-O formulário tem URL, tipo, qualidade, formato e as opções de legendas, thumbnail e metadados. O download roda em segundo plano e os arquivos ficam na pasta `DOWNLOAD_DIR`. Para usar proxy na interface web, defina `PROXY` no `.env`.
+O formulário tem URL, tipo, qualidade, formato e as opções de legendas, thumbnail e metadados. O download roda em segundo plano e os arquivos ficam na pasta `DOWNLOAD_DIR`. A página só avisa que o download começou; não mostra progresso nem erros. Para usar proxy na interface web, defina `PROXY` no `.env`.
 
-A interface não tem autenticação. Se for acessá-la de outros aparelhos, use apenas em rede confiável.
+A interface não tem autenticação, e a rota `/downloads/<arquivo>` entrega qualquer arquivo da pasta `DOWNLOAD_DIR` a quem souber o nome. Se for acessá-la de outros aparelhos, use apenas em rede confiável.
 
 ### Atualizar o yt-dlp
 
@@ -125,7 +125,10 @@ python updateytdlp.py
 ## Comportamentos a conhecer
 
 - `--type both` é aceito, mas hoje se comporta como `video`.
+- Com `--type audio`, use `--format mp3` ou `opus`. Os formatos de vídeo (`mp4`, `mkv`, `webm`) não são codecs de áudio válidos para a extração.
+- A qualidade não é validada: um valor que não seja número, `best` ou `worst` gera um formato inválido para o `yt-dlp`. Ela é ignorada em downloads de áudio.
 - `--skip N` limita a playlist aos itens de 1 até N, e não pula os N primeiros.
 - `--interval` funciona de forma confiável no modo interativo. Passado como argumento, o valor `inicio:fim` não é convertido em números e o download falha ao montar as opções.
+- Na fila (`--queue`), as threads compartilham o mesmo objeto de download e o campo da URL atual. Com várias URLs ao mesmo tempo, alguma pode ser baixada mais de uma vez ou ficar de fora. Para conferir, veja os arquivos na pasta de saída.
 - A interface web não oferece playlist, fila nem proxy no formulário.
 - O suporte a sites, formatos e autenticação depende do `yt-dlp` instalado. Alguns sites podem exigir cookies ou configurações específicas, que não devem ser colocados no repositório.
